@@ -17,6 +17,15 @@ enum Difficulty {
   HARD
 }
 
+enum SubmissionStatus {
+  PENDING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILATION_ERROR
+}
+
 model User {
   id           String       @id @default(cuid())
   name         String?
@@ -54,13 +63,16 @@ model TestCase {
 }
 
 model Submission {
-  id        String   @id @default(cuid())
-  userId    String
-  problemId String
-  code      String
-  language  String
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  id             String           @id @default(cuid())
+  userId         String
+  problemId      String
+  code           String
+  language       String
+  status         SubmissionStatus @default(PENDING)
+  runtimeMs      Int?
+  memoryKb       Int?
+  verdictMessage String?
+  createdAt      DateTime         @default(now())
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem        Problem          @relation(fields: [problemId], references: [id], onDelete: Cascade)
 }

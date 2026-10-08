@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import ReactMarkdown from "react-markdown";
+import EditorLoader from "./EditorLoader";
 
 export default async function ProblemDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,8 +25,8 @@ export default async function ProblemDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
-      <div className="lg:w-2/3">
+    <div className="max-w-7xl mx-auto p-4 flex flex-col lg:flex-row gap-6 h-[calc(100vh-80px)]">
+      <div className="lg:w-1/2 overflow-y-auto pr-2">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{problem.title}</h1>
         
         <div className="flex gap-4 mb-6">
@@ -64,14 +65,8 @@ export default async function ProblemDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
       
-      <div className="lg:w-1/3">
-        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 sticky top-6">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Submit Solution</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Code submission is currently disabled.</p>
-          <button disabled className="w-full bg-blue-600 text-white py-2 px-4 rounded opacity-50 cursor-not-allowed">
-            Submit
-          </button>
-        </div>
+      <div className="lg:w-1/2 flex flex-col h-full">
+        <EditorLoader slug={slug} />
       </div>
     </div>
   );
