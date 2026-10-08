@@ -11,6 +11,12 @@ enum Role {
   ADMIN
 }
 
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
 model User {
   id           String       @id @default(cuid())
   name         String?
@@ -23,14 +29,18 @@ model User {
 }
 
 model Problem {
-  id          String       @id @default(cuid())
-  title       String
-  description String
-  difficulty  String       @default("EASY")
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  testCases   TestCase[]
-  submissions Submission[]
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  title         String
+  description   String
+  difficulty    Difficulty   @default(EASY)
+  tags          String[]
+  timeLimitMs   Int          @default(2000)
+  memoryLimitMb Int          @default(256)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  testCases     TestCase[]
+  submissions   Submission[]
 }
 
 model TestCase {
@@ -38,6 +48,7 @@ model TestCase {
   problemId      String
   input          String
   expectedOutput String
+  isSample       Boolean @default(false)
   isHidden       Boolean @default(false)
   problem        Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 }
